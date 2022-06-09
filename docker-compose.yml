@@ -1,0 +1,130 @@
+version: '3.7'
+
+services:
+
+  # Blockchain
+
+  bootnode:
+    hostname: bootnode
+    ports:
+      - '8545:8545'
+      - '30303'
+      - '30303/udp'
+    networks:
+      chain_net:
+          ipv4_address: 172.4.0.111
+    image: 'hyperledger/besu'
+    user: "root:root"
+    volumes:
+      - bootnode_data:/opt/besu/database
+      - ./networkFiles/config:/etc/besu/config
+      - ./networkFiles/keys/bootnode:/etc/besu/keys
+    command: 
+      --data-path=/opt/besu/database
+      --genesis-file=/etc/besu/config/genesis.json 
+      --node-private-key-file=/etc/besu/keys/key
+      --min-gas-price=0
+      --rpc-http-enabled 
+      --rpc-http-host=0.0.0.0
+      --rpc-http-api=ETH,NET,IBFT,ADMIN,WEB3
+      --host-allowlist="*" 
+      --rpc-http-cors-origins="all"
+      --logging=INFO
+
+  node1:
+    hostname: node1
+    ports:
+      - '8546:8545'
+      - '30303'
+      - '30303/udp'
+    networks:
+      chain_net:
+          ipv4_address: 172.4.0.201
+    image: 'hyperledger/besu'
+    user: "root:root"
+    volumes:
+      - node1_data:/opt/besu/database
+      - ./networkFiles/config:/etc/besu/config
+      - ./networkFiles/keys/node1:/etc/besu/keys
+    command: 
+      --bootnodes=enode://${BOOTNODE_ID}@172.4.0.111:30303
+      --data-path=/opt/besu/database
+      --genesis-file=/etc/besu/config/genesis.json 
+      --node-private-key-file=/etc/besu/keys/key
+      --min-gas-price=0
+      --rpc-http-enabled 
+      --rpc-http-host=0.0.0.0
+      --rpc-http-api=ETH,NET,IBFT,ADMIN,WEB3
+      --host-allowlist="*" 
+      --rpc-http-cors-origins="all"
+      --logging=INFO
+
+  node2:
+    hostname: node2
+    ports:
+      - '8547:8545'
+      - '30303'
+      - '30303/udp'
+    networks:
+      chain_net:
+          ipv4_address: 172.4.0.202
+    image: 'hyperledger/besu'
+    user: "root:root"
+    volumes:
+      - node2_data:/opt/besu/database
+      - ./networkFiles/config:/etc/besu/config
+      - ./networkFiles/keys/node2:/etc/besu/keys
+    command: 
+      --bootnodes=enode://${BOOTNODE_ID}@172.4.0.111:30303
+      --data-path=/opt/besu/database
+      --genesis-file=/etc/besu/config/genesis.json 
+      --node-private-key-file=/etc/besu/keys/key
+      --min-gas-price=0
+      --rpc-http-enabled 
+      --rpc-http-host=0.0.0.0
+      --rpc-http-api=ETH,NET,IBFT,ADMIN,WEB3
+      --host-allowlist="*" 
+      --rpc-http-cors-origins="all"
+      --logging=INFO
+
+  node3:
+    hostname: node3
+    ports:
+      - '8548:8545'
+      - '30303'
+      - '30303/udp'
+    networks:
+      chain_net:
+          ipv4_address: 172.4.0.203
+    image: 'hyperledger/besu'
+    user: "root:root"
+    volumes:
+      - node3_data:/opt/besu/database
+      - ./networkFiles/config:/etc/besu/config
+      - ./networkFiles/keys/node3:/etc/besu/keys
+    command: 
+      --bootnodes=enode://${BOOTNODE_ID}@172.4.0.111:30303
+      --data-path=/opt/besu/database
+      --genesis-file=/etc/besu/config/genesis.json 
+      --node-private-key-file=/etc/besu/keys/key
+      --min-gas-price=0
+      --rpc-http-enabled 
+      --rpc-http-host=0.0.0.0
+      --rpc-http-api=ETH,NET,IBFT,ADMIN,WEB3
+      --host-allowlist="*" 
+      --rpc-http-cors-origins="all"
+      --logging=INFO
+
+volumes:
+  bootnode_data:
+  node1_data:
+  node2_data:
+  node3_data:
+
+
+networks:
+  chain_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.4.0.0/24
