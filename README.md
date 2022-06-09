@@ -1,4 +1,4 @@
-# Private IBTF network with Hyperledger besu + Docker
+# Private IBFT network with Hyperledger besu + Docker
 
 Hyperledger besu test network easy deployment with docker.
 
