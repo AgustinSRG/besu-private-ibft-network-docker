@@ -20,6 +20,8 @@ Edit any parameters you need in the `config.json` file. Afer you are done, type 
 besu operator generate-blockchain-config --config-file=config.json --to=networkFiles --private-key-file-name=key
 ```
 
+The generator creates folders for each node you specified in the configuration. Rename the folders so you have: `bootnode`, `node1`, `node2` and `node3`.
+
 After this, run a test enode to get the enode corresponding to the bootnode:
 
 ```
