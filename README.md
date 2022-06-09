@@ -46,6 +46,14 @@ docker-compose down
 
 ## Test it's working
 
+Get list of validators:
+
 ```
 curl -X POST --data "{\"jsonrpc\":\"2.0\",\"method\":\"ibft_getValidatorsByBlockNumber\",\"params\":[\"latest\"], \"id\":1}" http://localhost:8545
+```
+
+Get last block:
+
+```
+curl -X POST --data "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBlockByNumber\",\"params\":[\"latest\", false],\"id\":1}" http://localhost:8545
 ```
