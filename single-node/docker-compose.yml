@@ -1,0 +1,43 @@
+version: '3.7'
+
+services:
+
+  # Blockchain
+
+  bootnode:
+    hostname: bootnode
+    ports:
+      - '8545:8545'
+      - '30303'
+      - '30303/udp'
+    networks:
+      chain_net:
+          ipv4_address: 172.4.0.111
+    image: 'hyperledger/besu'
+    user: "root:root"
+    volumes:
+      - bootnode_data:/opt/besu/database
+      - ./networkFiles/config:/etc/besu/config
+      - ./networkFiles/keys/bootnode:/etc/besu/keys
+    command: 
+      --data-path=/opt/besu/database
+      --genesis-file=/etc/besu/config/genesis.json 
+      --node-private-key-file=/etc/besu/keys/key
+      --min-gas-price=0
+      --rpc-http-enabled 
+      --rpc-http-host=0.0.0.0
+      --rpc-http-api=ETH,NET,IBFT,ADMIN,WEB3
+      --host-allowlist="*" 
+      --rpc-http-cors-origins="all"
+      --logging=INFO
+
+volumes:
+  bootnode_data:
+
+
+networks:
+  chain_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.4.0.0/24
